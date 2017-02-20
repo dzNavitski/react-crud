@@ -1,21 +1,22 @@
 import { takeEvery } from 'redux-saga';
 import { put, call } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
+import { setUser } from '../actions';
 
-import axios from 'axios';
+const getUser = state => state.auth.user;
 
-//const getUser = state => state.auth.user;
-
-function auth(user) {
+function auth(action) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve('authenticated', user);
+            resolve(action.payload.userName);
         }, 2000)
     })
 }
 
 export function* logIn(user) {
-    yield call(auth, user);
+    const userName = yield call(auth, user);
+
+    yield put(setUser(userName));
 
     yield put(push('/posts'));
 }

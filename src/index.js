@@ -21,7 +21,6 @@ function onAppEnter(nextState, replace, cb) {
 }
 
 function serverAuth(authToken) {
-    console.log('serverAuth')
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve('authenticated');
