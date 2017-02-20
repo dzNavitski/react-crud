@@ -12,20 +12,14 @@ import App from './App';
 import LogIn from './containers/LogIn';
 import PostsList from './containers/PostsList';
 import PostCreate from './containers/PostCreate';
+import { checkAuth } from './actions';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
 function onAppEnter(nextState, replace, cb) {
-    serverAuth()
-        .then(cb,cb);
-}
-
-function serverAuth(authToken) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve('authenticated');
-        }, 2000)
-    });
+    setTimeout(() => {
+        store.dispatch(checkAuth(cb));
+    }, 0);
 }
 
 ReactDOM.render(

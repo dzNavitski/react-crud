@@ -69,3 +69,10 @@ export const setUser = (user) => {
         payload: user
     }
 };
+
+export const checkAuth = (cb) => {
+    return {
+        type: 'CHECK_AUTH',
+        payload: cb
+    }
+};
