@@ -52,13 +52,12 @@ class PostCreate extends Component {
         e.preventDefault();
         const {postTitle, views, likes} = this.state;
 
-        console.log(this.state);
         this.props.createPost({
             postTitle,
             views,
             likes,
             userName: 'Test Johny 1'
-        })
+        });
     }
 
     render() {

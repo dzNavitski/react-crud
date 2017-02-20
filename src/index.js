@@ -9,6 +9,7 @@ import { Router, Route, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import store from './store';
 import App from './App';
+import LogIn from './containers/LogIn';
 import PostsList from './containers/PostsList';
 import PostCreate from './containers/PostCreate';
 
@@ -31,6 +32,7 @@ function serverAuth(authToken) {
 ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
+            <Route path="/login"  component={LogIn} onEnter={onAppEnter}/>
             <Route onEnter={onAppEnter} component={App}>
                 <Route path="/posts"  component={PostsList}/>
                 <Route path="/create" component={PostCreate}/>

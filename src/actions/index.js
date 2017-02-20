@@ -55,3 +55,10 @@ export const createPost = (post) => {
         payload: post
     }
 };
+
+export const logIn = (user) => {
+    return {
+        type: 'LOG_IN',
+        payload: user
+    }
+};
