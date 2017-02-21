@@ -5,6 +5,7 @@ import { setUser, setPermissions } from '../actions';
 
 const getUser = state => state.postsRoot.auth.user;
 const getPermissions = state => state.postsRoot.auth.permissions;
+const getUrlQuery= state => state.routing.locationBeforeTransitions.query;
 
 function auth(action) {
     return new Promise((resolve, reject) => {
@@ -19,11 +20,13 @@ function auth(action) {
 
 export function* logIn(action) {
     const {userName, permissions} = yield call(auth, action);
+    const urlQuery = yield select(getUrlQuery);
+    const redirectUrl = urlQuery.redirectUrl || '/';
 
     yield put(setUser(userName));
     yield put(setPermissions(permissions));
 
-    yield put(push('/posts'));
+    yield put(push(redirectUrl));
 }
 
 export function* checkAuth(action) {

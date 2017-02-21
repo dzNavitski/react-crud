@@ -33,13 +33,15 @@ const Authorization = (WrappedComponent, routePermissions = []) => {
 
         componentWillMount() {
             const {user, permissions} = this.props;
+            const {path} = this.props.route;
+            console.log(this.props.route)
 
             if (user) {
                 if (!this.hasPermissions(routePermissions, permissions)) {
                     this.props.forwardTo('/nopermissions');
                 }
             } else {
-                this.props.forwardTo('/login');
+                this.props.forwardTo(`/login?redirectUrl=${path}`);
             }
         }
 
