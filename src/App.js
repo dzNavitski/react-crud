@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
 import './App.css';
 
-export default class App extends Component {
+const mapStateToProps = (state) => {
+    return {
+        user: state.postsRoot.auth.user,
+        permissions: state.postsRoot.auth.permissions
+    }
+};
+
+class App extends Component {
     constructor(props) {
         super(props);
     }
@@ -32,15 +40,18 @@ export default class App extends Component {
                                     <Link to="/posts">Posts</Link>
                                 </li>
                             </ul>
+
+                            <div className="navbar-right UserText">
+                                {this.props.user}
+                            </div>
                         </div>
                     </div>
                 </nav>
 
-                <div className="">
-
-                </div>
                 {this.props.children}
             </div>
         );
     }
 };
+
+export default connect(mapStateToProps, null)(App);

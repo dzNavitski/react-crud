@@ -70,9 +70,19 @@ export const setUser = (user) => {
     }
 };
 
-export const checkAuth = (cb) => {
+export const setPermissions = (permissions) => {
+    return {
+        type: 'SET_PERMISSIONS',
+        payload: permissions
+    }
+};
+
+export const checkAuth = (permissions, next) => {
     return {
         type: 'CHECK_AUTH',
-        payload: cb
+        payload: {
+            permissions,
+            next
+        }
     }
 };

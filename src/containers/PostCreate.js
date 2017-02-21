@@ -5,7 +5,9 @@ import {Link} from 'react-router';
 import {createPost} from '../actions';
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        user: state.postsRoot.auth.user
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -51,12 +53,13 @@ class PostCreate extends Component {
     onSubmit(e) {
         e.preventDefault();
         const {postTitle, views, likes} = this.state;
+        const {user} = this.props;
 
         this.props.createPost({
             postTitle,
             views,
             likes,
-            userName: 'Test Johny 1'
+            userName: user
         });
     }
 

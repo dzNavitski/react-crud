@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { hashHistory } from 'react-router';
 import createSagaMiddleware from 'redux-saga';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import postsRoot from './reducers';
 import rootSaga from './sagas';
@@ -14,7 +15,9 @@ const store = createStore(
         postsRoot,
         routing: routerReducer
     }),
-    applyMiddleware(sagaMiddleware, routeMiddleware)
+    composeWithDevTools(
+        applyMiddleware(sagaMiddleware, routeMiddleware)
+    )
 );
 
 sagaMiddleware.run(rootSaga);

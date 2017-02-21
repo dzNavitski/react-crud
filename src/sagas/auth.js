@@ -1,38 +1,62 @@
 import { takeEvery } from 'redux-saga';
-import { put, call } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
-import { setUser } from '../actions';
+import { put, call, select, fork } from 'redux-saga/effects';
+import { push, replace } from 'react-router-redux';
+import { setUser, setPermissions } from '../actions';
 
-const getUser = state => state.auth.user;
+const getUser = state => state.postsRoot.auth.user;
+const getPermissions = state => state.postsRoot.auth.permissions;
 
 function auth(action) {
-    console.log(action)
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve(action.payload.userName);
-        }, 2000)
-    })
-}
-
-function checkAuthPromise(action) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(action.payload);
+            resolve({
+                userName: action.payload.userName,
+                permissions: [1, 2, 3]
+            });
         }, 2000)
     })
 }
 
 export function* logIn(action) {
-    const userName = yield call(auth, action);
+    const {userName, permissions} = yield call(auth, action);
 
     yield put(setUser(userName));
+    yield put(setPermissions(permissions));
 
     yield put(push('/posts'));
 }
 
 export function* checkAuth(action) {
-    const cb = yield call(checkAuthPromise, action);
-    cb();
+    const user = yield select(getUser);
+    const next = action.payload.next;
+
+    if (user) {
+        yield fork(checkPermissions, action);
+    } else {
+        yield put(replace('/login'));
+        next();
+    }
+}
+
+export function* checkPermissions(action) {
+    const permissions = yield select(getPermissions);
+    const routePermissions = action.payload.permissions;
+    const next = action.payload.next;
+
+    if (routePermissions) {
+        if (hasPermissions(routePermissions, permissions)) {
+            next();
+        } else {
+            yield put(replace('/nopermissions'));
+            next();
+        }
+    } else {
+        next();
+    }
+}
+
+function hasPermissions(routePermissions, permissions) {
+    return routePermissions.every(per => permissions.includes(per));
 }
 
 export function* watchAuth() {

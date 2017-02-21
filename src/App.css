@@ -23,6 +23,11 @@
   margin: 40px auto;
 }
 
+.UserText {
+  padding: 15px 0 15px 15px;
+  color: white;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
