@@ -63,6 +63,12 @@ export const logIn = (user) => {
     }
 };
 
+export const logOut = () => {
+    return {
+        type: 'LOG_OUT'
+    }
+};
+
 export const setUser = (user) => {
     return {
         type: 'SET_USER',

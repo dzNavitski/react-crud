@@ -15,10 +15,34 @@ const store = createStore(
         postsRoot,
         routing: routerReducer
     }),
+    getPreloadedState(),
     composeWithDevTools(
         applyMiddleware(sagaMiddleware, routeMiddleware)
     )
 );
+
+function getPreloadedState() {
+    const user = localStorage.getItem('user');
+    const permissions = localStorage.getItem('permissions');
+    const state = {
+        postsRoot: {
+            auth: {
+                user: null,
+                permissions: null
+            }
+        }
+    };
+
+    if (user) {
+        state.postsRoot.auth.user = user;
+    }
+
+    if (permissions) {
+        state.postsRoot.auth.permissions = permissions;
+    }
+
+    return state;
+}
 
 sagaMiddleware.run(rootSaga);
 

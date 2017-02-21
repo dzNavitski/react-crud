@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
+import  {logOut} from './actions';
 import './App.css';
 
 const mapStateToProps = (state) => {
@@ -10,9 +11,24 @@ const mapStateToProps = (state) => {
     }
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logOut: () => {
+            dispatch(logOut());
+        }
+    }
+};
+
 class App extends Component {
     constructor(props) {
         super(props);
+
+        this.logOut = this.logOut.bind(this);
+    }
+
+    logOut(e) {
+        e.preventDefault();
+        this.props.logOut();
     }
 
     render() {
@@ -42,6 +58,10 @@ class App extends Component {
                             </ul>
 
                             <div className="navbar-right UserText">
+                                <a href="#" className="btn-link" onClick={this.logOut}>Log out</a>
+                            </div>
+
+                            <div className="navbar-right UserText">
                                 {this.props.user}
                             </div>
                         </div>
@@ -54,4 +74,4 @@ class App extends Component {
     }
 };
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

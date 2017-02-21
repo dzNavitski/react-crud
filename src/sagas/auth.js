@@ -26,10 +26,25 @@ export function* logIn(action) {
     yield put(setUser(userName));
     yield put(setPermissions(permissions));
 
+    localStorage.setItem('user', userName);
+    localStorage.setItem('permissions', JSON.stringify(permissions));
+
     yield put(push(redirectUrl));
 }
 
+export function* logOut(action) {
+    console.log('logout')
+    yield put(setUser(null));
+    yield put(setPermissions(null));
+
+    localStorage.setItem('user', null);
+    localStorage.setItem('permissions', null);
+
+    yield put(push('/login'));
+}
+
 export function* checkAuth(action) {
+    console.log('checkAuth')
     const user = yield select(getUser);
     const next = action.payload.next;
 
@@ -64,5 +79,6 @@ function hasPermissions(routePermissions, permissions) {
 
 export function* watchAuth() {
     yield takeEvery('LOG_IN', logIn);
+    yield takeEvery('LOG_OUT', logOut);
     yield takeEvery('CHECK_AUTH', checkAuth);
 }
