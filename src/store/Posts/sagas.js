@@ -1,6 +1,6 @@
-import { takeEvery, takeLatest } from 'redux-saga';
-import { put, call, select, cancelled } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import {takeEvery, takeLatest} from 'redux-saga';
+import {put, call, select, cancelled} from 'redux-saga/effects';
+import {push} from 'react-router-redux';
 import axios from 'axios';
 
 import constants from './constanst';
@@ -34,7 +34,7 @@ export function* fetchPostsFlow() {
                 loading: false
             }
         });
-    } catch(e) {
+    } catch (e) {
         yield put({
             type: constants.FETCH_FAILURE_POSTS,
             payload: {
@@ -53,7 +53,7 @@ export function* createPostFlow(post) {
         yield call(createPost, post.payload);
 
         yield put(push('/posts'));
-    } catch(e) {
+    } catch (e) {
 
     }
 }

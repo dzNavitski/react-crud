@@ -1,5 +1,5 @@
 import './Pagination.css'
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 const pageSizes = [5, 10, 15, 20, 30];
 const NAV_BUTTON_TYPES = {
@@ -31,20 +31,20 @@ class Pagination extends Component {
             <div>
                 <PageSizer currentSize={limit}
                            sizes={pageSizes}
-                           onPageSizeChange={this.onPageSizeChange} />
+                           onPageSizeChange={this.onPageSizeChange}/>
                 <nav>
                     <ul className="pagination">
                         <NavPageButton type={NAV_BUTTON_TYPES.PREV}
                                        active={active}
                                        limit={limit}
                                        total={total}
-                                       onPageChange={this.movePage.bind(this, NAV_BUTTON_TYPES.PREV)} />
+                                       onPageChange={this.movePage.bind(this, NAV_BUTTON_TYPES.PREV)}/>
                         {this.getPages()}
                         <NavPageButton type={NAV_BUTTON_TYPES.NEXT}
                                        active={active}
                                        limit={limit}
                                        total={total}
-                                       onPageChange={this.movePage.bind(this, NAV_BUTTON_TYPES.NEXT)} />
+                                       onPageChange={this.movePage.bind(this, NAV_BUTTON_TYPES.NEXT)}/>
                     </ul>
                 </nav>
             </div>
@@ -65,7 +65,6 @@ class Pagination extends Component {
             return;
         }
 
-        //this.setState({active, offset});
         this.props.onPageChange({limit, offset, active});
     }
 
@@ -80,7 +79,6 @@ class Pagination extends Component {
         const limit = parseInt(event.target.value, 10);
         const offset = 0;
 
-        //this.setState({limit, offset, active: 1});
         this.props.onPageChange({limit, offset, active: 1});
     }
 
@@ -122,7 +120,7 @@ const NavPageButton = ({type, active, limit, total, onPageChange}) => {
 
     if (type === NAV_BUTTON_TYPES.PREV) {
         if (active === 1) {
-            liProps.className =  'disabled';
+            liProps.className = 'disabled';
             linkProps.onClick = (e) => e.preventDefault();
         } else {
             linkProps.onClick = onPageChange;
@@ -131,7 +129,7 @@ const NavPageButton = ({type, active, limit, total, onPageChange}) => {
 
     if (type === NAV_BUTTON_TYPES.NEXT) {
         if (active === numberOfPages) {
-            liProps.className =  'disabled';
+            liProps.className = 'disabled';
             linkProps.onClick = (e) => e.preventDefault();
         } else {
             linkProps.onClick = onPageChange;
@@ -142,8 +140,8 @@ const NavPageButton = ({type, active, limit, total, onPageChange}) => {
         <li {...liProps}>
             <a {...linkProps} href="#">
                 { type === NAV_BUTTON_TYPES.PREV
-                        ? <span>&laquo;</span>
-                        : <span>&raquo;</span>
+                    ? <span>&laquo;</span>
+                    : <span>&raquo;</span>
                 }
             </a>
         </li>
@@ -158,7 +156,5 @@ const PageSizer = ({currentSize, sizes, onPageSizeChange}) => {
         </select>
     );
 };
-
-
 
 export default Pagination;
