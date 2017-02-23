@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getPosts = (filter) => {
+export const getPosts = (filter, source) => {
     return axios({
         method: 'get',
         url: '/posts',
@@ -9,7 +9,8 @@ export const getPosts = (filter) => {
             _order: filter.sort.order,
             _page: filter.paging.active,
             _limit: filter.paging.limit
-        }
+        },
+        cancelToken: source && source.token
     });
 };
 

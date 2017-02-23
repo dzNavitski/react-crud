@@ -17,6 +17,14 @@ server.use((req, res, next) => {
     next();
 });
 
+server.use((req, res, next) => {
+    if (req.method === 'GET') {
+        req.body.createdAt = Date.now();
+    }
+    // Continue to JSON Server router
+    setTimeout(next, 300);
+});
+
 // Use default router
 server.use(router);
 server.listen(4000, () => console.log('JSON Server is running'));

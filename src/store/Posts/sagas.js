@@ -1,6 +1,7 @@
-import { takeEvery } from 'redux-saga';
-import { put, call, select } from 'redux-saga/effects';
+import { takeEvery, takeLatest } from 'redux-saga';
+import { put, call, select, cancelled } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
+import axios from 'axios';
 
 import constants from './constanst';
 import {getPosts, createPost} from './endpoints';
@@ -11,6 +12,8 @@ const getPaging = state => state.posts.filter.paging;
 export function* fetchPostsFlow() {
     const sort = yield select(getSort);
     const paging = yield select(getPaging);
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
 
     yield put({
         type: constants.FETCH_START_POSTS,
@@ -21,7 +24,7 @@ export function* fetchPostsFlow() {
         const postsResponse = yield call(getPosts, {
             sort,
             paging
-        });
+        }, source);
 
         yield put({
             type: constants.FETCH_SUCCESS_POSTS,
@@ -38,6 +41,10 @@ export function* fetchPostsFlow() {
                 error: 'Can\'t load posts'
             }
         });
+    } finally {
+        if (yield cancelled()) {
+            source.cancel('Operation canceled by the user.');
+        }
     }
 }
 
@@ -52,8 +59,6 @@ export function* createPostFlow(post) {
 }
 
 export default function* watchPosts() {
-    yield takeEvery(constants.INIT_POSTS, fetchPostsFlow);
-    yield takeEvery(constants.CHANGE_POSTS_PAGE, fetchPostsFlow);
-    yield takeEvery(constants.CHANGE_POSTS_SORT, fetchPostsFlow);
+    yield takeLatest([constants.INIT_POSTS, constants.CHANGE_POSTS_PAGE, constants.CHANGE_POSTS_SORT], fetchPostsFlow);
     yield takeEvery(constants.CREATE_POST, createPostFlow);
 }
