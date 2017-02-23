@@ -1,10 +1,12 @@
-import { takeEvery } from 'redux-saga';
-import { put, call, select, fork } from 'redux-saga/effects';
-import { push, replace } from 'react-router-redux';
-import { setUser, setPermissions } from '../actions';
+import {takeEvery} from 'redux-saga';
+import {put, call, select, fork} from 'redux-saga/effects';
+import {push, replace} from 'react-router-redux';
+import {setUser, setPermissions} from './actions';
 
-const getUser = state => state.postsRoot.auth.user;
-const getPermissions = state => state.postsRoot.auth.permissions;
+import constants from './constanst';
+
+const getUser = state => state.auth.user;
+const getPermissions = state => state.auth.permissions;
 const getUrlQuery= state => state.routing.locationBeforeTransitions.query;
 
 function auth(action) {
@@ -18,7 +20,7 @@ function auth(action) {
     })
 }
 
-export function* logIn(action) {
+export function* logInFlow(action) {
     const {userName, permissions} = yield call(auth, action);
     const urlQuery = yield select(getUrlQuery);
     const redirectUrl = urlQuery.redirectUrl || '/';
@@ -32,8 +34,7 @@ export function* logIn(action) {
     yield put(push(redirectUrl));
 }
 
-export function* logOut(action) {
-    console.log('logout')
+export function* logOutFlow(action) {
     yield put(setUser(null));
     yield put(setPermissions(null));
 
@@ -43,20 +44,19 @@ export function* logOut(action) {
     yield put(push('/login'));
 }
 
-export function* checkAuth(action) {
-    console.log('checkAuth')
+export function* checkAuthFlow(action) {
     const user = yield select(getUser);
     const next = action.payload.next;
 
     if (user) {
-        yield fork(checkPermissions, action);
+        yield fork(checkPermissionsFlow, action);
     } else {
         yield put(replace('/login'));
         next();
     }
 }
 
-export function* checkPermissions(action) {
+export function* checkPermissionsFlow(action) {
     const permissions = yield select(getPermissions);
     const routePermissions = action.payload.permissions;
     const next = action.payload.next;
@@ -77,8 +77,8 @@ function hasPermissions(routePermissions, permissions) {
     return routePermissions.every(per => permissions.includes(per));
 }
 
-export function* watchAuth() {
-    yield takeEvery('LOG_IN', logIn);
-    yield takeEvery('LOG_OUT', logOut);
-    yield takeEvery('CHECK_AUTH', checkAuth);
+export default function* watchAuth() {
+    yield takeEvery(constants.LOG_IN, logInFlow);
+    yield takeEvery(constants.LOG_OUT, logOutFlow);
+    yield takeEvery(constants.CHECK_AUTH, checkAuthFlow);
 }

@@ -3,3 +3,17 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.Margin-bottom-m {
+  margin-bottom: 20px;
+}
+
+.LogInForm {
+  width: 320px;
+  margin: 40px auto;
+}
+
+.UserText {
+  padding: 15px 0 15px 15px;
+  color: white;
+}

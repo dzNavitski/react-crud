@@ -4,8 +4,8 @@ import { replace } from 'react-router-redux';
 
 const mapStateToProps = (state) => {
     return {
-        user: state.postsRoot.auth.user,
-        permissions: state.postsRoot.auth.permissions
+        user: state.auth.user,
+        permissions: state.auth.permissions
     }
 };
 
@@ -34,7 +34,6 @@ const Authorization = (WrappedComponent, routePermissions = []) => {
         componentWillMount() {
             const {user, permissions} = this.props;
             const {path} = this.props.route;
-            console.log(this.props.route)
 
             if (user) {
                 if (!this.hasPermissions(routePermissions, permissions)) {

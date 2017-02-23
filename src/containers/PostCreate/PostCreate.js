@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {createPost} from '../actions';
+import {createPost} from '../../store/Posts/actions';
 
 const mapStateToProps = (state) => {
     return {
-        user: state.postsRoot.auth.user
+        user: state.auth.user
     }
 };
 

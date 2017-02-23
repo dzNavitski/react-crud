@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {logIn} from '../actions';
-
-const mapStateToProps = (state) => {
-    return {}
-};
+import {logIn} from '../../store/Auth/actions';
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -82,4 +78,4 @@ class LogIn extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
+export default connect(null, mapDispatchToProps)(LogIn);

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import './Pagination.css'
+import React, { Component } from 'react';
 
 const pageSizes = [5, 10, 15, 20, 30];
 const NAV_BUTTON_TYPES = {

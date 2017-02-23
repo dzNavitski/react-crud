@@ -2,17 +2,15 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {changePostsPage, changePostsSort, initPosts} from '../actions';
-import '../App.css'
-
-import Table from '../components/Table/Table';
+import {changePostsPage, changePostsSort, initPosts} from '../../store/Posts/actions';
+import Table from '../../components/Table/Table';
 
 const mapStateToProps = (state) => {
     return {
-        paging: state.postsRoot.postsFilter.paging,
-        sort: state.postsRoot.postsFilter.sort,
-        posts: state.postsRoot.posts
-    }
+        paging: state.posts.filter.paging,
+        sort: state.posts.filter.sort,
+        posts: state.posts.list
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -73,14 +71,13 @@ class PostsList extends Component {
                     <div className="col-md-12">
                         <Link className="btn btn-primary Margin-bottom-m" role="button" to="/create">Create new post</Link>
 
-                        <Table
-                            dataSource={posts.data}
-                            columns={columns}
-                            sort={sort}
-                            paging={paging}
-                            total={posts.total}
-                            onPageChange={onPageChange}
-                            onSortChange={onSortChange}></Table>
+                        <Table dataSource={posts.data}
+                               columns={columns}
+                               sort={sort}
+                               paging={paging}
+                               total={posts.total}
+                               onPageChange={onPageChange}
+                               onSortChange={onSortChange}></Table>
                     </div>
                 </div>
             </div>

@@ -8,13 +8,13 @@ import { Provider } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import store from './store';
-import App from './App';
-import LogIn from './containers/LogIn';
-import PostsList from './containers/PostsList';
-import PostCreate from './containers/PostCreate';
-import Authorization from './containers/Auth';
-import NoPermissions from './containers/NoPermissions';
-import { checkAuth } from './actions';
+import App from './containers/App/App';
+import LogIn from './containers/LogIn/LogIn';
+import PostsList from './containers/PostsList/PostsList';
+import PostCreate from './containers/PostCreate/PostCreate';
+import Authorization from './containers/Auth/Auth';
+import NoPermissions from './containers/NoPermissions/NoPermissions';
+import { checkAuth } from './store/Auth/actions';
 
 const history = syncHistoryWithStore(hashHistory, store);
 

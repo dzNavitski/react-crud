@@ -1,13 +1,13 @@
+import './App.css';
 import React, { Component } from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import  {logOut} from './actions';
-import './App.css';
+import  {logOut} from '../../store/Auth/actions';
 
 const mapStateToProps = (state) => {
     return {
-        user: state.postsRoot.auth.user,
-        permissions: state.postsRoot.auth.permissions
+        user: state.auth.user,
+        permissions: state.auth.permissions
     }
 };
 
@@ -72,6 +72,6 @@ class App extends Component {
             </div>
         );
     }
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
