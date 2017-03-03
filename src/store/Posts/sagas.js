@@ -18,7 +18,9 @@ export function* fetchPostsFlow() {
 
     yield put({
         type: constants.FETCH_START_POSTS,
-        payload: true
+        payload: {
+            loading: true
+        }
     });
 
     yield put(showLoading());
@@ -55,11 +57,14 @@ export function* fetchPostsFlow() {
 
 export function* createPostFlow(post) {
     try {
+        yield put(showLoading());
         yield call(createPost, post.payload);
 
         yield put(push('/posts'));
     } catch (e) {
 
+    } finally {
+        yield put(hideLoading());
     }
 }
 

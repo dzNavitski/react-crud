@@ -5,7 +5,7 @@ import {initialStatePosts, initialStatePostsFilter} from './initialStates';
 const list = (state = initialStatePosts, action) => {
     switch (action.type) {
         case constants.FETCH_START_POSTS: {
-            const loading = true;
+            const {loading} = action.payload;
             return {...state, loading};
         }
         case constants.FETCH_SUCCESS_POSTS: {
