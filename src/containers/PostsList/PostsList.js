@@ -69,7 +69,7 @@ class PostsList extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        <Link className="btn btn-primary Margin-bottom-m" role="button" to="/create">Create new post</Link>
+                        <Link className="btn btn-primary Margin-bottom-m" role="button" to="/post">Create new post</Link>
 
                         <Table dataSource={posts.data}
                                columns={columns}

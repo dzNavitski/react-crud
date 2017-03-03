@@ -16,3 +16,9 @@ export const initialStatePostsFilter = {
         order: 'ASC'
     }
 };
+
+export const initialEditPost = {
+    postTitle: '',
+    views: 0,
+    likes: 0
+};

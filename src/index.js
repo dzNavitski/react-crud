@@ -29,7 +29,8 @@ ReactDOM.render(
             <Route path="/nopermissions" component={NoPermissions}/>
             <Route path="/" component={App}>
                 <Route onEnter={onAppEnter} permissions={[1, 2, 3]} path="/posts" component={PostsList}/>
-                <Route path="/create" component={Authorization(PostCreate, [1, 2, 3])}/>
+                <Route path="/post" component={Authorization(PostCreate, [1, 2, 3])}/>
+                <Route path="/post/:id" component={Authorization(PostCreate, [1, 2, 3])}/>
             </Route>
         </Router>
     </Provider>,

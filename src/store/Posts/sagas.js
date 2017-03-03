@@ -5,7 +5,8 @@ import axios from 'axios';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 
 import constants from './constanst';
-import {getPosts, createPost} from './endpoints';
+import {getPosts, createPost, getPost} from './endpoints';
+import {setEditPost} from './actions';
 
 const getSort = state => state.posts.filter.sort;
 const getPaging = state => state.posts.filter.paging;
@@ -68,7 +69,28 @@ export function* createPostFlow(post) {
     }
 }
 
+export function* fetchPostFlow(action) {
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+    const id = action.payload;
+
+    try {
+        yield put(showLoading());
+        const postResponse = yield call(getPost, id, source);
+        yield put(setEditPost(postResponse.data))
+    } catch (e) {
+
+    } finally {
+        if (yield cancelled()) {
+            source.cancel('Operation canceled by the user.');
+        }
+
+        yield put(hideLoading());
+    }
+}
+
 export default function* watchPosts() {
     yield takeLatest([constants.INIT_POSTS, constants.CHANGE_POSTS_PAGE, constants.CHANGE_POSTS_SORT], fetchPostsFlow);
     yield takeEvery(constants.CREATE_POST, createPostFlow);
+    yield takeLatest(constants.FETCH_POST, fetchPostFlow);
 }

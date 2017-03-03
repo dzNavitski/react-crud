@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import constants from './constanst';
-import {initialStatePosts, initialStatePostsFilter} from './initialStates';
+import {initialStatePosts, initialStatePostsFilter, initialEditPost} from './initialStates';
 
 const list = (state = initialStatePosts, action) => {
     switch (action.type) {
@@ -39,7 +39,20 @@ const filter = (state = initialStatePostsFilter, action) => {
     }
 };
 
+const edit = (state = initialEditPost, action) => {
+    switch (action.type) {
+        case constants.SET_EDIT_POST:
+            const post = action.payload;
+            return {...state, ...post};
+        case constants.CLEAR_EDIT_POST:
+            return {...initialEditPost};
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     list,
-    filter
+    filter,
+    edit
 });

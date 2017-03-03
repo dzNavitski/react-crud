@@ -51,6 +51,26 @@ export const fetchFailurePosts = (error) => {
     }
 };
 
+export const fetchPost = (id) => {
+    return {
+        type: constants.FETCH_POST,
+        payload: id
+    }
+};
+
+export const setEditPost = (post) => {
+    return {
+        type: constants.SET_EDIT_POST,
+        payload: post
+    }
+};
+
+export const clearEditPost = () => {
+    return {
+        type: constants.CLEAR_EDIT_POST
+    }
+};
+
 export const createPost = (post) => {
     return {
         type: 'CREATE_POST',

@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {createPost} from '../../store/Posts/actions';
+import {createPost, fetchPost, setEditPost, clearEditPost} from '../../store/Posts/actions';
 
 const mapStateToProps = (state) => {
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        editPost: state.posts.edit
     }
 };
 
@@ -14,6 +15,12 @@ const mapDispatchToProps = (dispatch) => {
     return {
         createPost: (post) => {
             dispatch(createPost(post))
+        },
+        fetchPost: (id) => {
+            dispatch(fetchPost(id))
+        },
+        clearEditPost: () => {
+            dispatch(clearEditPost());
         }
     }
 };
@@ -21,38 +28,24 @@ const mapDispatchToProps = (dispatch) => {
 class PostCreate extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            postTitle: '',
-            views: 0,
-            likes: 0
-        };
-
-        this.onTitleChange = this.onTitleChange.bind(this);
-        this.onViewsChange = this.onViewsChange.bind(this);
-        this.onLikesChange = this.onLikesChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
-    onTitleChange(e) {
-        const postTitle = e.target.value;
-        this.setState({postTitle});
+    componentDidMount() {
+        const {id} = this.props.router.params;
+        id ? this.props.fetchPost(id) : this.props.clearEditPost();
     }
 
-    onViewsChange(e) {
-        const views = e.target.value;
-        this.setState({views});
-    }
+    onFieldChange = (e) => {
+        const {editPost, setEditPost} = this.props;
+        const {name ,value} = e.target;
 
-    onLikesChange(e) {
-        const likes = e.target.value;
-        this.setState({likes});
-    }
+        return setEditPost(Object.assign({}, editPost, {[name]: value}));
+    };
 
 
-    onSubmit(e) {
+    onSubmit = (e) => {
         e.preventDefault();
-        const {postTitle, views, likes} = this.state;
+        const {postTitle, views, likes} = this.props.editPost;
         const {user} = this.props;
 
         this.props.createPost({
@@ -61,9 +54,11 @@ class PostCreate extends Component {
             likes,
             userName: user
         });
-    }
+    };
 
     render() {
+        const {editPost} = this.props;
+
         return (
             <div className="container">
                 <div className="row">
@@ -76,9 +71,10 @@ class PostCreate extends Component {
                                 <input type="text"
                                        className="form-control"
                                        id="postTitle"
+                                       name="postTitle"
                                        placeholder="Post title"
-                                       value={this.state.postTitle}
-                                       onChange={this.onTitleChange}
+                                       value={editPost.postTitle}
+                                       onChange={this.onFieldChange}
                                        required/>
                             </div>
                             <div className="form-group">
@@ -86,9 +82,10 @@ class PostCreate extends Component {
                                 <input type="number"
                                        className="form-control"
                                        id="views"
+                                       name="views"
                                        placeholder="Number of views"
-                                       value={this.state.views}
-                                       onChange={this.onViewsChange}
+                                       value={editPost.views}
+                                       onChange={this.onFieldChange}
                                        min="0"
                                        required/>
                             </div>
@@ -97,9 +94,10 @@ class PostCreate extends Component {
                                 <input type="number"
                                        className="form-control"
                                        id="likes"
+                                       name="likes"
                                        placeholder="Number of likes"
-                                       value={this.state.likes}
-                                       onChange={this.onLikesChange}
+                                       value={editPost.likes}
+                                       onChange={this.onFieldChange}
                                        min="0"
                                        required/>
                             </div>

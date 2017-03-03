@@ -14,6 +14,14 @@ export const getPosts = (filter, source) => {
     });
 };
 
+export const getPost = (id, source) => {
+    return axios({
+        method: 'get',
+        url: `/posts/${id}`,
+        cancelToken: source && source.token
+    });
+};
+
 export const createPost = (data) => {
     return axios({
         method: 'post',
