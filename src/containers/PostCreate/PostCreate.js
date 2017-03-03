@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import {createPost, fetchPost, setEditPost, clearEditPost} from '../../store/Posts/actions';
+import {createPost, updatePost, fetchPost, setEditPost, clearEditPost} from '../../store/Posts/actions';
 
 const mapStateToProps = (state) => {
     return {
@@ -19,6 +19,12 @@ const mapDispatchToProps = (dispatch) => {
         fetchPost: (id) => {
             dispatch(fetchPost(id))
         },
+        setEditPost: (post) => {
+            dispatch(setEditPost(post));
+        },
+        updatePost: (post) => {
+            dispatch(updatePost(post));
+        },
         clearEditPost: () => {
             dispatch(clearEditPost());
         }
@@ -30,9 +36,22 @@ class PostCreate extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        const {id} = this.props.router.params;
+    componentWillMount() {
+        const {id} = this.props.params;
         id ? this.props.fetchPost(id) : this.props.clearEditPost();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const currentId = this.props.params.id;
+        const nextId = nextProps.params.id;
+
+        if (currentId !== nextId) {
+            nextId ? this.props.fetchPost(nextId) : this.props.clearEditPost();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.clearEditPost();
     }
 
     onFieldChange = (e) => {
@@ -45,10 +64,13 @@ class PostCreate extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+        const {id} = this.props.params;
         const {postTitle, views, likes} = this.props.editPost;
         const {user} = this.props;
+        const call = id ? this.props.updatePost : this.props.createPost;
 
-        this.props.createPost({
+        call({
+            id,
             postTitle,
             views,
             likes,
@@ -58,7 +80,6 @@ class PostCreate extends Component {
 
     render() {
         const {editPost} = this.props;
-
         return (
             <div className="container">
                 <div className="row">

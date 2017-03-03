@@ -5,8 +5,8 @@ import axios from 'axios';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 
 import constants from './constanst';
-import {getPosts, createPost, getPost} from './endpoints';
-import {setEditPost} from './actions';
+import {getPosts, getPost, createPost, updatePost} from './endpoints';
+import {fetchSuccessPosts, fetchFailurePosts, setEditPost} from './actions';
 
 const getSort = state => state.posts.filter.sort;
 const getPaging = state => state.posts.filter.paging;
@@ -27,26 +27,10 @@ export function* fetchPostsFlow() {
     yield put(showLoading());
 
     try {
-        const postsResponse = yield call(getPosts, {
-            sort,
-            paging
-        }, source);
-
-        yield put({
-            type: constants.FETCH_SUCCESS_POSTS,
-            payload: {
-                data: postsResponse.data,
-                total: postsResponse.headers['x-total-count'],
-                loading: false
-            }
-        });
+        const postsResponse = yield call(getPosts, {sort, paging}, source);
+        yield put(fetchSuccessPosts(postsResponse.data, postsResponse.headers['x-total-count']));
     } catch (e) {
-        yield put({
-            type: constants.FETCH_FAILURE_POSTS,
-            payload: {
-                error: 'Can\'t load posts'
-            }
-        });
+        yield put(fetchFailurePosts('Can\'t load posts'));
     } finally {
         if (yield cancelled()) {
             source.cancel('Operation canceled by the user.');
@@ -56,10 +40,24 @@ export function* fetchPostsFlow() {
     }
 }
 
-export function* createPostFlow(post) {
+export function* createPostFlow(action) {
     try {
         yield put(showLoading());
-        yield call(createPost, post.payload);
+        yield call(createPost, action.payload);
+
+        yield put(push('/posts'));
+    } catch (e) {
+
+    } finally {
+        yield put(hideLoading());
+    }
+}
+
+export function* updatePostFlow(action) {
+    try {
+        const {id} = action.payload;
+        yield put(showLoading());
+        yield call(updatePost, id, action.payload);
 
         yield put(push('/posts'));
     } catch (e) {
@@ -77,7 +75,7 @@ export function* fetchPostFlow(action) {
     try {
         yield put(showLoading());
         const postResponse = yield call(getPost, id, source);
-        yield put(setEditPost(postResponse.data))
+        yield put(setEditPost(postResponse.data));
     } catch (e) {
 
     } finally {
@@ -91,6 +89,7 @@ export function* fetchPostFlow(action) {
 
 export default function* watchPosts() {
     yield takeLatest([constants.INIT_POSTS, constants.CHANGE_POSTS_PAGE, constants.CHANGE_POSTS_SORT], fetchPostsFlow);
-    yield takeEvery(constants.CREATE_POST, createPostFlow);
     yield takeLatest(constants.FETCH_POST, fetchPostFlow);
+    yield takeEvery(constants.CREATE_POST, createPostFlow);
+    yield takeEvery(constants.UPDATE_POST, updatePostFlow);
 }

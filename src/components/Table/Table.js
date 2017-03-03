@@ -1,5 +1,6 @@
 import './Table.css';
 import React, { Component } from 'react';
+import uuidV1 from 'uuid';
 
 import Pagination from '../Pagination/Pagination';
 
@@ -19,7 +20,7 @@ class Table extends Component {
         const headers = columns.map((column, index) => {
             const isActive = sort.dataIndex === column.dataIndex;
             const attrs = {
-                key: index
+                key: uuidV1()
             };
             const classes = [];
 
@@ -40,14 +41,21 @@ class Table extends Component {
 
             attrs.className = classes.join(' ');
 
-            if (column.render) {
-                return (column.render(attrs, column.title));
+            if (column.renderColl) {
+                return (column.renderColl(attrs, column.title));
             } else {
                 return (<th {...attrs}>{column.title}</th>);
             }
         });
         const rows = dataSource.map(row => {
-            const tds = columns.map((column, index) => <td key={index}>{row[column.dataIndex]}</td>);
+            const tds = columns.map((column) => {
+                if (column.renderCell) {
+                    return column.renderCell(row, column);
+                } else {
+                    return (<td key={uuidV1()}>{row[column.dataIndex]}</td>);
+                }
+            });
+
             return (
                 <tr key={row.id}>
                     {tds}

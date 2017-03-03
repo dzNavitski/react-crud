@@ -1,12 +1,11 @@
 {
   "posts": [
     {
-      "id": 0,
-      "userName": "Johnny0",
+      "id": "0",
       "postTitle": "My new car post 0",
       "views": 1949,
       "likes": 14,
-      "createdAt": 1437073227668
+      "userName": "test@test.com"
     },
     {
       "id": 1,
@@ -966,6 +965,13 @@
       "userName": "test@test.com",
       "createdAt": 1488538224016,
       "id": 120
+    },
+    {
+      "id": "121",
+      "postTitle": "My new car post 1",
+      "views": 219,
+      "likes": 40,
+      "userName": "test@test.com"
     }
   ]
 }

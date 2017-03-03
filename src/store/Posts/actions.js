@@ -27,12 +27,12 @@ export const fetchStartPosts = () => {
     }
 };
 
-export const fetchSuccessPosts = (posts) => {
+export const fetchSuccessPosts = (data, total) => {
     return {
         type: constants.FETCH_SUCCESS_POSTS,
         payload: {
-            data: posts.data,
-            total: posts.total,
+            data,
+            total,
             loading: false,
             error: null
         }
@@ -73,7 +73,14 @@ export const clearEditPost = () => {
 
 export const createPost = (post) => {
     return {
-        type: 'CREATE_POST',
+        type: constants.CREATE_POST,
+        payload: post
+    }
+};
+
+export const updatePost = (post) => {
+    return {
+        type: constants.UPDATE_POST,
         payload: post
     }
 };

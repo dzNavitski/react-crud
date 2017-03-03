@@ -18,6 +18,7 @@ export const initialStatePostsFilter = {
 };
 
 export const initialEditPost = {
+    id: null,
     postTitle: '',
     views: 0,
     likes: 0

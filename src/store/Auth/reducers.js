@@ -1,4 +1,3 @@
-import {combineReducers} from 'redux';
 import constants from './constanst';
 import {initialStateAuth} from './initialStates';
 

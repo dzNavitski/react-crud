@@ -27,5 +27,13 @@ export const createPost = (data) => {
         method: 'post',
         url: '/posts',
         data
-    })
+    });
+};
+
+export const updatePost = (id, data) => {
+    return axios({
+        method: 'put',
+        url: `/posts/${id}`,
+        data
+    });
 };
