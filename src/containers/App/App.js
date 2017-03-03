@@ -1,6 +1,7 @@
 import './App.css';
 import React, { Component } from 'react';
 import {Link} from 'react-router';
+import LoadingBar from 'react-redux-loading-bar';
 import {connect} from 'react-redux';
 import  {logOut} from '../../store/Auth/actions';
 
@@ -34,6 +35,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                <LoadingBar style={{ zIndex: 1000, background: '#337ab7' }} />
                 <nav className="navbar navbar-inverse">
                     <div className="container">
                         <div className="navbar-header">

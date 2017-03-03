@@ -2,6 +2,7 @@ import {takeEvery, takeLatest} from 'redux-saga';
 import {put, call, select, cancelled} from 'redux-saga/effects';
 import {push} from 'react-router-redux';
 import axios from 'axios';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 
 import constants from './constanst';
 import {getPosts, createPost} from './endpoints';
@@ -19,6 +20,8 @@ export function* fetchPostsFlow() {
         type: constants.FETCH_START_POSTS,
         payload: true
     });
+
+    yield put(showLoading());
 
     try {
         const postsResponse = yield call(getPosts, {
@@ -45,6 +48,8 @@ export function* fetchPostsFlow() {
         if (yield cancelled()) {
             source.cancel('Operation canceled by the user.');
         }
+
+        yield put(hideLoading());
     }
 }
 

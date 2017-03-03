@@ -3,7 +3,9 @@ import {hashHistory} from 'react-router';
 import createSagaMiddleware from 'redux-saga';
 import {routerReducer, routerMiddleware} from 'react-router-redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
+import { loadingBarReducer } from 'react-redux-loading-bar'
 import authReducer from './Auth/reducers';
 import authSagas from './Auth/sagas';
 import postsReducer from './Posts/reducers';
@@ -18,11 +20,12 @@ const store = createStore(
     combineReducers({
         auth: authReducer,
         posts: postsReducer,
-        routing: routerReducer
+        routing: routerReducer,
+        loadingBar: loadingBarReducer
     }),
     getInitialState(),
     composeWithDevTools(
-        applyMiddleware(sagaMiddleware, routeMiddleware)
+        applyMiddleware(sagaMiddleware, routeMiddleware, loadingBarMiddleware())
     )
 );
 
