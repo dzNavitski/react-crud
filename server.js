@@ -22,7 +22,7 @@ server.use((req, res, next) => {
         req.body.createdAt = Date.now();
     }
     // Continue to JSON Server router
-    setTimeout(next, 300);
+    setTimeout(next, 1500);
 });
 
 // Use default router
