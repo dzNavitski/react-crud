@@ -5,8 +5,8 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 
 import constants from './constanst';
 import {getPosts, getPost, createPost, updatePost} from './endpoints';
-import {fetchSuccessPosts, fetchFailurePosts, setEditPost} from './actions';
-import {cancebleRequest} from '../common/request-helpers';
+import {fetchSuccessPosts, setEditPost} from './actions';
+import {cancelableRequest} from '../common/request-helpers';
 
 const getSort = state => state.posts.filter.sort;
 const getPaging = state => state.posts.filter.paging;
@@ -16,7 +16,7 @@ export function* fetchPostsFlow() {
         const sort = yield select(getSort);
         const paging = yield select(getPaging);
         yield put(showLoading());
-        const postsResponse = yield call(cancebleRequest, fetchPosts, sort, paging);
+        const postsResponse = yield call(cancelableRequest, fetchPosts, sort, paging);
         yield put(fetchSuccessPosts(postsResponse.data, postsResponse.headers['x-total-count']));
     } finally {
         yield put(hideLoading());
@@ -67,7 +67,7 @@ export function* fetchPostFlow(action) {
     try {
         const id = action.payload;
         yield put(showLoading());
-        const postResponse = yield call(cancebleRequest, fetchPost, id);
+        const postResponse = yield call(cancelableRequest, fetchPost, id);
         yield put(setEditPost(postResponse.data));
     } finally {
         yield put(hideLoading());
