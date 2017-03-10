@@ -18,22 +18,16 @@ export function* fetchPostsFlow() {
         yield put(showLoading());
         const postsResponse = yield call(cancelableRequest, fetchPosts, sort, paging);
         yield put(fetchSuccessPosts(postsResponse.data, postsResponse.headers['x-total-count']));
+    } catch (e) {
+        console.error(e);
     } finally {
         yield put(hideLoading());
     }
 }
 
 function* fetchPosts(source, sort, paging) {
-    try {
-        const response = yield call(getPosts, {sort, paging}, source);
-        return  response;
-    } catch (e) {
-        console.error(e);
-    } finally {
-        if (yield cancelled()) {
-            source.cancel('Operation canceled by the user.');
-        }
-    }
+    const response = yield call(getPosts, {sort, paging}, source);
+    return  response;
 }
 
 export function* createPostFlow(action) {
@@ -43,7 +37,7 @@ export function* createPostFlow(action) {
 
         yield put(push('/posts'));
     } catch (e) {
-
+        console.error(e);
     } finally {
         yield put(hideLoading());
     }
@@ -57,7 +51,7 @@ export function* updatePostFlow(action) {
 
         yield put(push('/posts'));
     } catch (e) {
-
+        console.error(e);
     } finally {
         yield put(hideLoading());
     }
@@ -69,22 +63,16 @@ export function* fetchPostFlow(action) {
         yield put(showLoading());
         const postResponse = yield call(cancelableRequest, fetchPost, id);
         yield put(setEditPost(postResponse.data));
+    } catch (e) {
+        console.error(e);
     } finally {
         yield put(hideLoading());
     }
 }
 
 function* fetchPost(source, id) {
-    try {
-        const response = yield call(getPost, id, source);
-        return response;
-    } catch (e) {
-        console.error(e);
-    } finally {
-        if (yield cancelled()) {
-            source.cancel('Operation canceled by the user.');
-        }
-    }
+    const response = yield call(getPost, id, source);
+    return response;
 }
 
 export default function* watchPosts() {

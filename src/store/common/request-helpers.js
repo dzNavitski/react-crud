@@ -1,10 +1,16 @@
-import {call} from 'redux-saga/effects';
+import {call, cancelled} from 'redux-saga/effects';
 import axios from 'axios';
 
 export function* cancelableRequest(forked, ...rest) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
-    const response = yield call(forked, source, ...rest);
-    return response;
+    try {
+        const response = yield call(forked, source, ...rest);
+        return response;
+    } finally {
+        if (yield cancelled()) {
+            source.cancel('Operation canceled by the user.');
+        }
+    }
 }
